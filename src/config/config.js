@@ -1,6 +1,6 @@
 // config.js
-import path from "path";
-
+const path = require("path");
+console.log("ENV:", process.env.NODE_ENV);
 module.exports = (()=>{
   let config = {};
 
@@ -9,9 +9,9 @@ module.exports = (()=>{
   };
   const makeConfig = () => {
     if (getEnv() === 'development'){
-      require('dotenv').config({path:path.join(__dirname, "../.env")});
+      require('dotenv').config({path:path.join(__dirname, "../../.env")});
     }
-
+    console.log(process.env);
     config = {
       db: {
         host: process.env.DB_HOST,
