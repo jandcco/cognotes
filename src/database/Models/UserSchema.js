@@ -1,4 +1,5 @@
 const {Schema} = require("mongoose");
+const bcrypt = require("bcrypt")
 
 const UserSchema = new Schema({
   email: {
@@ -18,6 +19,16 @@ const UserSchema = new Schema({
     type: [Schema.Types.ObjectId],
     ref: "NoteSchema"
   }
+});
+
+/**
+ * Verify that a given password is correct for this user.
+ * @param  {[type]} enteredPassword password to check
+ * @return {Promise} - resolves to true if password is correct,
+ *                      false otherwise
+ */
+UserSchema.methods.verifyPassword(err, function (enteredPassword){
+  return bcrypt.compare(enteredPassword, this.password);
 });
 
 module.exports = UserSchema;
