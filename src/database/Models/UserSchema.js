@@ -18,6 +18,10 @@ const UserSchema = new Schema({
   notes: {
     type: [Schema.Types.ObjectId],
     ref: "NoteSchema"
+  },
+  superuser:{
+    type: Boolean,
+    required: true
   }
 });
 
