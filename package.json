@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "chai-http": "^4.0.0",
     "nodemon": "^1.17.3"
   },
   "dependencies": {

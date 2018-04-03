@@ -9,6 +9,6 @@ const CreateNote = async (owner, text, title) => {
   });
   await newNote.save();
   return newNote;
-}
+};
 
 module.exports = CreateNote;

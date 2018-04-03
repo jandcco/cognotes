@@ -5,6 +5,6 @@ const EditNote = async (noteId, updatedText) => {
   note.text = updatedText;
   await note.save();
   return note;
-}
+};
 
-module.exports = EditNote
+module.exports = EditNote;
