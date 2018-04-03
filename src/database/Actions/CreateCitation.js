@@ -6,10 +6,10 @@ const CreateCitation = async (note, url, caption, publication) => {
     caption,
     publication,
     note
-  })
+  });
 
   await newCitation.save();
   return newCitation;
-}
+};
 
 module.exports = CreateCitation;

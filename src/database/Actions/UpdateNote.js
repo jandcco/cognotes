@@ -6,3 +6,5 @@ const EditNote = async (noteId, updatedText) => {
   await note.save();
   return note;
 }
+
+module.exports = EditNote
