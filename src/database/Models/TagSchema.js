@@ -20,8 +20,8 @@ const TagSchema = new Schema({
  * Returns the most popular 20 tags, in descending order
  * @return {array}
  */
-TagSchema.static.mostUsed(err, function (){
+TagSchema.static.mostUsed = function (){
   return this.where('notesCounter').gt(1).sort(-1).limit(20)
-})
+};
 
 module.exports = TagSchema;

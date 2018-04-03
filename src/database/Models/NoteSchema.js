@@ -9,7 +9,8 @@ const NoteSchema = new Schema({
     type: String
   },
   owner: {
-    type: UserSchema
+    type: Schema.Types.ObjectId,
+    ref: "User"
   },
   tags: {
     type: [Schema.Types.ObjectId],
@@ -31,8 +32,8 @@ const NoteSchema = new Schema({
  * Method to return the tags of the note. (As opposed to the ids of the tags)
  * @return {array}
  */
-NoteSchema.methods.getTags(err, function (){
+NoteSchema.methods.getTags = function (){
   return this.populate("tags")
-})
+};
 
 module.exports = NoteSchema;
