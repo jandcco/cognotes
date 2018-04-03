@@ -7,29 +7,78 @@ const GroupSchema = new Schema({
     unique: true
   },
   administrators: {
-    type: Schema.Types.ObjectId,
+    type: [Schema.Types.ObjectId],
     ref: "User"
   },
   members: {
-    type: Schema.Types.ObjectId,
+    type: [Schema.Types.ObjectId],
+    ref: "User"
+  },
+  notes: {
+    type: [Schema.Types.ObjectId],
+    ref: "Note"
+  },
+  pendingMembers: {
+    type: [Schema.Types.ObjectId],
     ref: "User"
   }
 });
 
-GroupSchema.methods.addMember(err, function(user){
-
+/**
+ * Adds a new user to pendingMembers
+ * @param  {String} userId
+ * @return {undefined}
+ */
+GroupSchema.methods.addPendingMember(err, function(userId) {
+  this.pendingMembers.push(userId);
 });
 
-GroupSchema.methods.removeMember(err, function(user){
+/**
+ * Accepts a pending member from pendingMembers as a group member
+ * @param  {String} userId
+ * @return {undefined}
+ */
+GroupSchema.methods.acceptMember(err, function(userId) {
+  this.members.push(userId);
+  this.pendingMembers.splice(this.pendingMembers.indexOf(userId), 1)
+})
 
+/**
+ * Rejects a pending member by removing them from pendingMembers.
+ * @param  {String} userId
+ * @return {undefined}
+ */
+GroupSchema.methods.rejectMember(err, function(userId) {
+  this.pendingMembers.splice(this.pendingMembers.indexOf(userId), 1)
+})
+
+/**
+ * Removes a member (not admin) from the group
+ * @param  {String} userId
+ * @return {undefined}
+ */
+GroupSchema.methods.removeMember(err, function(userId){
+  this.members.splice(this.members.indexOf(userId), 1)
 });
 
-GroupSchema.methods.promoteMemberToAdmin(err, function(groupMember){
-
+/**
+ * Adds member to administrators, removes from members.
+ * @param  {String} groupMemberId ObjectId of the group member to promote
+ * @return {undefined}
+ */
+GroupSchema.methods.promoteMemberToAdmin(err, function(groupMemberId){
+  this.administrators.push(groupMemberId);
+  this.members.splice(this.members.indexOf(groupMemberId), 1);
 });
 
-GroupSchema.methods.demoteMemberFromAdmin(err, function(groupMember){
-
+/**
+ * Adds member to members, removes from administrators
+ * @param  {String} groupMemberId
+ * @return {undefined}
+ */
+GroupSchema.methods.demoteMemberFromAdmin(err, function(groupMemberId){
+  this.members.push(groupMemberId);
+  this.administrators.splice(this.administrators.indexOf(groupMemberId), 1);
 });
 
 module.exports = GroupSchema;

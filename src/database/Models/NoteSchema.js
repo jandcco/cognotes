@@ -13,8 +13,26 @@ const NoteSchema = new Schema({
   },
   tags: {
     type: [Schema.Types.ObjectId],
-    ref: "TagSchema"
+    ref: "Tag"
+  },
+  createdAt: {
+    type: Date,
+    required: true,
+    default: Date.now()
+  },
+  modifiedAt: {
+    type: Date,
+    required: true,
+    default: Date.now()
   }
+})
+
+/**
+ * Method to return the tags of the note. (As opposed to the ids of the tags)
+ * @return {array}
+ */
+NoteSchema.methods.getTags(err, function (){
+  return this.populate("tags")
 })
 
 module.exports = NoteSchema;

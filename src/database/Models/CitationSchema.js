@@ -12,7 +12,7 @@ const CitationSchema = new Schema({
   },
   note: {
     type: Schema.Types.ObjectId,
-    ref: "NoteSchema"
+    ref: "Note"
   }
 });
 

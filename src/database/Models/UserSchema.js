@@ -11,13 +11,13 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
-  display_name: {
+  displayName: {
     type: String,
     required: true
   },
   notes: {
     type: [Schema.Types.ObjectId],
-    ref: "NoteSchema"
+    ref: "Note"
   },
   superuser:{
     type: Boolean,
@@ -27,7 +27,7 @@ const UserSchema = new Schema({
 
 /**
  * Verify that a given password is correct for this user.
- * @param  {[type]} enteredPassword password to check
+ * @param  {String} enteredPassword password to check
  * @return {Promise} - resolves to true if password is correct,
  *                      false otherwise
  */
