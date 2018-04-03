@@ -8,3 +8,5 @@ const UpdateUsername = (newDisplayName) => {
   user.save();
   return user.username;
 }
+
+module.exports = UpdateUsername;
