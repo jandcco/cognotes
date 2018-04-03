@@ -29,3 +29,5 @@ const CreateUser = async (username, password) => {
     }
   }
 };
+
+module.exports = CreateUser;
