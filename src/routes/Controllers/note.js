@@ -29,7 +29,8 @@ const getNotes = async (req, res) => {
 const createNote = async (req, res) => {
   const {text, title}  = req.body;
   //TODO: check that below is the right structure once we implement passport authentication
-  const userId = req.session.passport.id;
+  //TODO: REMOVE THE OR (temp use for testing before implementing passport)
+  const userId = req.session.passport.id || "5ac50c92b4cfe6637add94c6";
   try {
     const note = await CreateNote(userId, text, title);
     res.status(200).send(note);
