@@ -4,8 +4,6 @@ const bcrypt = require("bcrypt")
 const UserSchema = new Schema({
   email: {
     type: String,
-    required: true,
-    unique: true
   },
   password: {
     type: String,
@@ -31,8 +29,8 @@ const UserSchema = new Schema({
  * @return {Promise} - resolves to true if password is correct,
  *                      false otherwise
  */
-UserSchema.methods.verifyPassword(err, function (enteredPassword){
+UserSchema.methods.verifyPassword = function (enteredPassword){
   return bcrypt.compare(enteredPassword, this.password);
-});
+};
 
 module.exports = UserSchema;

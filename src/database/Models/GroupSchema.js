@@ -29,56 +29,56 @@ const GroupSchema = new Schema({
  * @param  {String} userId
  * @return {undefined}
  */
-GroupSchema.methods.addPendingMember(err, function(userId) {
+GroupSchema.methods.addPendingMember = function(userId) {
   this.pendingMembers.push(userId);
-});
+};
 
 /**
  * Accepts a pending member from pendingMembers as a group member
  * @param  {String} userId
  * @return {undefined}
  */
-GroupSchema.methods.acceptMember(err, function(userId) {
+GroupSchema.methods.acceptMember = function(userId) {
   this.members.push(userId);
   this.pendingMembers.splice(this.pendingMembers.indexOf(userId), 1)
-})
+};
 
 /**
  * Rejects a pending member by removing them from pendingMembers.
  * @param  {String} userId
  * @return {undefined}
  */
-GroupSchema.methods.rejectMember(err, function(userId) {
+GroupSchema.methods.rejectMember = function(userId) {
   this.pendingMembers.splice(this.pendingMembers.indexOf(userId), 1)
-})
+};
 
 /**
  * Removes a member (not admin) from the group
  * @param  {String} userId
  * @return {undefined}
  */
-GroupSchema.methods.removeMember(err, function(userId){
+GroupSchema.methods.removeMember = function(userId){
   this.members.splice(this.members.indexOf(userId), 1)
-});
+};
 
 /**
  * Adds member to administrators, removes from members.
  * @param  {String} groupMemberId ObjectId of the group member to promote
  * @return {undefined}
  */
-GroupSchema.methods.promoteMemberToAdmin(err, function(groupMemberId){
+GroupSchema.methods.promoteMemberToAdmin = function(groupMemberId){
   this.administrators.push(groupMemberId);
   this.members.splice(this.members.indexOf(groupMemberId), 1);
-});
+};
 
 /**
  * Adds member to members, removes from administrators
  * @param  {String} groupMemberId
  * @return {undefined}
  */
-GroupSchema.methods.demoteMemberFromAdmin(err, function(groupMemberId){
+GroupSchema.methods.demoteMemberFromAdmin = function(groupMemberId){
   this.members.push(groupMemberId);
   this.administrators.splice(this.administrators.indexOf(groupMemberId), 1);
-});
+};
 
 module.exports = GroupSchema;
