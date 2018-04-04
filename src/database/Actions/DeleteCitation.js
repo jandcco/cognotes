@@ -6,6 +6,6 @@ const DeleteCitation = async (citationId) => {
   } catch (e){
     throw e;
   }
-}
+};
 
 module.exports = DeleteCitation;
