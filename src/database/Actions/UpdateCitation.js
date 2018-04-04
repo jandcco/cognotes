@@ -1,6 +1,8 @@
 const Citation = require("../Models/Citation");
 
+
 const UpdateCitation = async (originalCitation, newUrl, newCaption, newPublication) => {
+
   originalCitation.caption = newCaption;
   originalCitation.url = newUrl;
   originalCitation.publication = newPublication;
@@ -9,3 +11,6 @@ const UpdateCitation = async (originalCitation, newUrl, newCaption, newPublicati
 }
 
 module.exports = UpdateCitation
+
+}
+

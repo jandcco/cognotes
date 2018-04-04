@@ -2,7 +2,9 @@ const mongoose = require("mongoose");
 const Config = require("../config/config").getConfig();
 const startClient = async function startClient()  {
   mongoose.Promise = global.Promise;
-  await mongoose.connect(`mongodb://${Config.db.host}/${Config.db.database}`);
+
+  const connection = await mongoose.connect(`mongodb://${Config.db.host}/${Config.db.database}`);
+  console.log(mongoose);
   console.log("Mongo has started");
 }
 
