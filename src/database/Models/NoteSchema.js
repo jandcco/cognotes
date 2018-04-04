@@ -36,4 +36,19 @@ NoteSchema.methods.getTags = function (){
   return this.populate("tags")
 };
 
+NoteSchema.methods.addTag = function(tagId) {
+  let index = this.tags.indexOf(tagId);
+  // don't add dupe tags
+  if (index < 0) {
+    this.tags.push(tagId);
+  }
+};
+
+NoteSchema.methods.removeTag = function(tagId) {
+  let index = this.tags.indexOf(tagId);
+  if (index >= 0) {
+    this.tags.splice(index, 1);
+  }
+};
+
 module.exports = NoteSchema;
