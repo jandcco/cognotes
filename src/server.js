@@ -6,7 +6,11 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const logger = require("morgan");
 const mongoClient = require("./database/client");
+const passport = require("passport");
+const config = require("./config/config").getConfig();
 const app = express();
+
+require("./config/passport.js")(passport);
 
 // Setting view engine
 app.set('view engine', 'pug');
@@ -19,7 +23,15 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 
+app.use(session({
+    secret: config.server.sessionSecret,
+    resave: "true",
+    saveUninitialized: "false"
+  }
+));
+
 mongoClient();
+app.use(passport.initialize());
 // Set Routes
 const index = require('./routes/index');
 app.use("/", index);

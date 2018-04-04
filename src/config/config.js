@@ -16,7 +16,8 @@ module.exports = (()=>{
         database: process.env.DB_NAME
       },
       server: {
-        port: process.env.API_PORT
+        port: process.env.API_PORT,
+        sessionSecret: process.env.SESSION_SECRET
       }
     };
     return config;
