@@ -10,6 +10,7 @@ const UpdateCitation = require("../../src/database/Actions/UpdateCitation");
 
 const user_props = { username: "tester", password: "testpassword" };
 const note_props = { text: "contents of note go here", title: "this is the name of my note"};
+
 describe("CreateUser", function () {
   beforeEach(async () => {
     resetDb();
@@ -17,6 +18,7 @@ describe("CreateUser", function () {
 
   it("creates a new user with a name", async () => {
     const newUser = await CreateUser(user_props.username, user_props.password);
+    console.log(newUser._id);
     expect(newUser.displayName).to.equal(user_props.username);
   });
 });
