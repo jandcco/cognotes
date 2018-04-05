@@ -2,26 +2,26 @@
 const path = require("path");
 const express = require('express');
 const session = require("express-session");
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const mongoClient = require("./database/client");
 const app = express();
 
 // Setting view engine
-app.set('view engine', 'pug');
-app.set('views', path.join(__dirname,'/views'));
+app.set("view engine", "pug");
+app.set("views", path.join(__dirname,"/views"));
 
 // Set middlewares
-app.use(logger('dev'));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(logger("dev"));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 
 mongoClient();
 // Set Routes
-const index = require('./routes/index');
+const index = require("./routes/index");
 app.use("/", index);
 
 // Set Error Handling (Should be done after all routes are defined)
@@ -31,12 +31,12 @@ app.use(function(req, res, next){
   next(err);
 });
 
-app.use(function(err, req, res, next){
+app.use(function(err, req, res, next){ // eslint-disable-line no-unused-vars
   res.status(err.status || 500);
   res.send(err.status);
 });
 
 // Start the Server
-app.listen(3000, () => console.log('Example app listening on port 3000!'));
+app.listen(3000, () => console.log("Example app listening on port 3000!")); //eslint-disable-line no-console
 
 module.exports = app;

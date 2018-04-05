@@ -3,11 +3,15 @@ const { expect } = chai;
 const chaiHttp = require("chai-http");
 const resetDb = require("../utilities/resetDb");
 const app = require("../../src/server");
+const CreateUser = require("../../src/database/Actions/CreateUser");
+
 
 chai.use(chaiHttp);
 
 describe("note routes", () => {
-  before("reset db", () => resetDb());
+  before("reset db", async () => {
+    resetDb();
+  });
   describe("Post /note", () => {
     let response;
     before("make request", () => {

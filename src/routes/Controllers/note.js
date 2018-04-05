@@ -65,7 +65,8 @@ const deleteNote = async (req, res) => {
  */
 const updateNote = async (req, res) => {
   const userId = req.session.passport.id;
-  const { noteId, updatedText } = req.body;
+  const noteId = req.params.id
+  const {updatedText} = req.body;
   const note = await GetNote(noteId);
   if (note.owner === userId) {
     const updated = await UpdateNote(noteId, updatedText);
