@@ -6,7 +6,7 @@ const passport = require("passport");
 
 
 const noteController = require("./Controllers/note");
-const tagController = require("./Controllers/note");
+const tagController = require("./Controllers/tag");
 const groupController = require("./Controllers/group");
 const citationController = require("./Controllers/citation");
 
