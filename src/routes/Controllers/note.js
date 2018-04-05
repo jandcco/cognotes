@@ -3,6 +3,7 @@ const GetNote = require("../../database/Actions/GetNote");
 const GetNotes = require("../../database/Actions/GetNotes");
 const DeleteNote = require("../../database/Actions/DeleteNote");
 const UpdateNote = require("../../database/Actions/UpdateNote");
+const GetNoteCitations = require("../../database/Actions/GetNoteCitations");
 
 /**
  * If :id parameter provided, gets that one note, otherwise gets all notes.
@@ -74,9 +75,26 @@ const updateNote = async (req, res) => {
   }
 };
 
+/**
+ * Gets all citation for given note.
+ * @param  {object}  req expects :id (of note) as req param.
+ * @param  {object}  res
+ * @return {Promise}
+ */
+const getNoteCitations = async (req, res) => {
+  const noteId = req.params.id;
+  try {
+    let citations = await GetNoteCitations(noteId);
+    res.status(200).send(citations);
+  } catch (e) {
+    throw e;
+  }
+};
+
 module.exports = {
   getNotes,
   createNote,
   deleteNote,
-  updateNote
+  updateNote,
+  getNoteCitations
 };
