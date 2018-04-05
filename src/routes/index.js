@@ -1,16 +1,24 @@
 const express = require("express");
 const userController = require("../routes/Controllers/user");
+const auth = require("../routes/Controllers/auth");
 const router = express.Router();
-const ensureLoggedIn = require("connect-ensure-login").ensureLoggedIn;
 const passport = require("passport");
 
+const myEnsureLogin = (req, res, next) => {
+  if(req.session && req.session.passport) {
+    next()
+  } else {
+    res.redirect('/login')
+  }
+}
+
 router.route("/users")
-  .get(ensureLoggedIn(), userController.getUsers)
+  .get(auth.verifyTokenMiddleWare, userController.getUsers)
   .post(passport.authenticate("local-signup"), userController.signedUp)
-  .put(ensureLoggedIn(), userController.updateUsername)
-  .delete(ensureLoggedIn(), userController.deleteUser)
+  .put(auth.verifyTokenMiddleWare, userController.updateUsername)
+  .delete(auth.verifyTokenMiddleWare, userController.deleteUser)
 
 router.route("/login")
-  .post(passport.authenticate("local-login"), userController.loggedIn)
+  .post(auth.tryAuthenticateLocal, userController.loggedIn)
   
   module.exports = router;
