@@ -1,7 +1,7 @@
 const User = require("../Models/User");
 
-const GetUser = async (userName) => {
-  return await User.findOne({displayName: username});
+const GetUser = async (displayName) => {
+  return await User.findOne({displayName});
 }
 
 module.exports = GetUser;

@@ -1,16 +1,14 @@
 // Basic Dependancies & App Initialization
 const path = require("path");
 const express = require('express');
-const session = require("express-session");
-const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+
 const logger = require("morgan");
 const mongoClient = require("./database/client");
+let passport = require("passport");
+const config = require("./config/config").getConfig();
 const app = express();
-
-// Setting view engine
-app.set("view engine", "pug");
-app.set("views", path.join(__dirname,"/views"));
 
 // Set middlewares
 app.use(logger("dev"));
@@ -19,9 +17,23 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 mongoClient();
+
+const index = require('./routes/index');
+app.use(function(req, res, next) {
+  console.log(req.session);
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Headers", "Access-Control-Allow-Credentials, Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  next();
+});
+
 // Set Routes
-const index = require("./routes/index");
+
+
 app.use("/", index);
 
 // Set Error Handling (Should be done after all routes are defined)
@@ -37,6 +49,7 @@ app.use(function(err, req, res, next){ // eslint-disable-line no-unused-vars
 });
 
 // Start the Server
-app.listen(3000, () => console.log("Example app listening on port 3000!")); //eslint-disable-line no-console
+app.listen(config.server.port, () => console.log(`Example app listening on port ${config.server.port}!`));
 
 module.exports = app;
+

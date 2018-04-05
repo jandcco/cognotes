@@ -1,5 +1,9 @@
 const express = require("express");
+const userController = require("../routes/Controllers/user");
+const auth = require("../routes/Controllers/auth");
 const router = express.Router();
+const passport = require("passport");
+
 
 const {
   getNotes,
@@ -34,10 +38,16 @@ const {
   updateCitation
 } = require("./Controllers/citation");
 
-router.get("/", (req, res) => {
-  res.send("Woo");
-});
 
+router.route("/users")
+  .get(auth.verifyTokenMiddleWare, userController.getUsers)
+  .post(passport.authenticate("local-signup"), userController.signedUp)
+  .put(auth.verifyTokenMiddleWare, userController.updateUsername)
+  .delete(auth.verifyTokenMiddleWare, userController.deleteUser)
+
+router.route("/login")
+  .post(auth.tryAuthenticateLocal, userController.loggedIn)
+  
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /* Auth & user routes */
 
@@ -76,3 +86,4 @@ router.delete("/moderate/group/:id", deleteGroup);
 
 
 module.exports = router;
+

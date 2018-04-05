@@ -1,22 +1,23 @@
 const bcrypt = require("bcrypt");
 const User = require("../Models/User");
 
-const CreateUser = async (displayName, password) => {
-  let hashedPassword;
-  if (password){
-    hashedPassword = await bcrypt.hash(password, 10);
-  } else{
-    const noPasswordError = new Error("No password was included");
-    throw noPasswordError;
-  }
-
-  const newUser = new User({
-    displayName,
-    password: hashedPassword,
-    superuser: false
-  });
+const CreateUser = async (email, displayName, password) => {
 
   try{
+    let hashedPassword;
+    if (password){
+      hashedPassword = await bcrypt.hash(password, 10);
+    } else{
+      const noPasswordError = new Error("No password was included");
+      throw noPasswordError;
+    }
+    const newUser = new User({
+      email,
+      displayName,
+      password: hashedPassword,
+      superuser: false
+    });
+
     await newUser.save();
     return newUser;
   } catch (e){
