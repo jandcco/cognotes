@@ -116,13 +116,17 @@ const removeNoteFromGroup = async (req, res) => {
   if (!userId) return res.status(401);
   const groupId = req.param.id;
   const noteId = req.body.noteId;
-  let group = await GetGroup(groupId);
-  let note = await GetNote(noteId);
-  if (note.owner == userId || group.administrators.indexOf(userId) >= 0) {
-    group.removeNote(noteId);
-    res.status(200);
-  } else {
-    res.status(403);
+  try {
+    let group = await GetGroup(groupId);
+    let note = await GetNote(noteId);
+    if (note.owner == userId || group.administrators.indexOf(userId) >= 0) {
+      group.removeNote(noteId);
+      res.status(200);
+    } else {
+      res.status(403);
+    }
+  } catch (e) {
+    throw e;
   }
 };
 

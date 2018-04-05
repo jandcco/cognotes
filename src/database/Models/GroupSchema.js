@@ -30,7 +30,9 @@ const GroupSchema = new Schema({
  * @return {undefined}
  */
 GroupSchema.methods.addPendingMember = function(userId) {
-  this.pendingMembers.push(userId);
+  if(!this.administrators.includes(userId) && !this.members.includes(userId) && !this.pendingMembers.includes(userId)) {
+    this.pendingMembers.push(userId);
+  }
 };
 
 /**

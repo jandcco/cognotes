@@ -3,14 +3,16 @@ const path = require("path");
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+
 const logger = require("morgan");
 const mongoClient = require("./database/client");
 let passport = require("passport");
 const config = require("./config/config").getConfig();
 const app = express();
+
 // Set middlewares
-app.use(logger('dev'));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(logger("dev"));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
@@ -19,6 +21,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 mongoClient();
+
 const index = require('./routes/index');
 app.use(function(req, res, next) {
   console.log(req.session);
@@ -30,6 +33,7 @@ app.use(function(req, res, next) {
 
 // Set Routes
 
+
 app.use("/", index);
 
 // Set Error Handling (Should be done after all routes are defined)
@@ -39,10 +43,13 @@ app.use(function(req, res, next){
   next(err);
 });
 
-app.use(function(err, req, res, next){
+app.use(function(err, req, res, next){ // eslint-disable-line no-unused-vars
   res.status(err.status || 500);
   res.send(err.status);
 });
 
 // Start the Server
 app.listen(config.server.port, () => console.log(`Example app listening on port ${config.server.port}!`));
+
+module.exports = app;
+
