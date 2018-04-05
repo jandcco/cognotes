@@ -24,4 +24,16 @@ TagSchema.static.mostUsed = function (){
   return this.where('notesCounter').gt(1).sort(-1).limit(20)
 };
 
+TagSchema.methods.addNote = function(noteId) {
+  this.notes.push(noteId);
+  this.notesCounter += 1;
+};
+
+TagSchema.methods.removeNote = function(noteId) {
+  let index = this.notes.indexOf(noteId);
+  if (index >= 0) {
+    this.notes.splice(index, 1);
+    this.notesCounter -= 1;
+  }
+};
 module.exports = TagSchema;

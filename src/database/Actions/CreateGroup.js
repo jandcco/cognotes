@@ -1,19 +1,18 @@
 const Group = require("../Models/Group");
 
-const CreateGroup = async (name, foundingUser) => {
+const CreateGroup = async (name, foundingUserId) => {
   try {
     const newGroup = new Group({
       name
-    })
-  
+    });
+
     await newGroup.save();
-    newGroup.addMember(foundingUser);
-    newGroup.promoteMemberToAdmin(foundingUser);
+    newGroup.promoteMemberToAdmin(foundingUserId);
     return newGroup;
 
   } catch (e){
     throw e;
   }
-}
+};
 
 module.exports = CreateGroup;

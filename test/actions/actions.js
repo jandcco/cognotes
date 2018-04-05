@@ -10,6 +10,7 @@ const UpdateCitation = require("../../src/database/Actions/UpdateCitation");
 
 const user_props = { username: "tester", password: "testpassword" };
 const note_props = { text: "contents of note go here", title: "this is the name of my note"};
+
 describe("CreateUser", function () {
   beforeEach(async () => {
     resetDb();
@@ -45,7 +46,7 @@ describe("CreateCitation", function () {
   });
 
   it("creates a new citation with a property", async () => {
-    const newCitation = await CreateCitation(note_props._id, "wikipedia", "wiki", "the internet");
+    const newCitation = await CreateCitation(note._id, "wikipedia", "wiki", "the internet");
     expect(newCitation.caption).to.equal("wiki");
   });
 });
@@ -60,7 +61,7 @@ describe("UpdateCitation", function () {
   });
 
   it("updates a citation", async () => {
-    const newCitation = await CreateCitation(note_props._id, "wikipedia", "wiki", "the internet");
+    const newCitation = await CreateCitation(note._id, "wikipedia", "wiki", "the internet");
     const updatedCitation = await UpdateCitation(newCitation, "wikipedia", "new caption here", "the internet");
     expect(updatedCitation.caption).to.equal("new caption here");
   });

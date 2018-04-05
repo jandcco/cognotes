@@ -62,13 +62,16 @@ GroupSchema.methods.removeMember = function(userId){
 };
 
 /**
- * Adds member to administrators, removes from members.
+ * Adds member to administrators, removes from members array (if exists there).
  * @param  {String} groupMemberId ObjectId of the group member to promote
  * @return {undefined}
  */
 GroupSchema.methods.promoteMemberToAdmin = function(groupMemberId){
   this.administrators.push(groupMemberId);
-  this.members.splice(this.members.indexOf(groupMemberId), 1);
+  let memberIndex = this.members.indexOf(groupMemberId)
+  if (memberIndex >= 0){
+    this.members.splice(this.members.indexOf(groupMemberId), 1);
+  }
 };
 
 /**
@@ -80,5 +83,14 @@ GroupSchema.methods.demoteMemberFromAdmin = function(groupMemberId){
   this.members.push(groupMemberId);
   this.administrators.splice(this.administrators.indexOf(groupMemberId), 1);
 };
+
+GroupSchema.methods.addNote = function(noteId) {
+  this.notes.push(noteId);
+};
+
+GroupSchema.methods.removeNote = function(noteId) {
+  let index = this.notes.indexOf(noteId);
+  if (index >= 0) this.notes.splice(index, 1);
+}
 
 module.exports = GroupSchema;
