@@ -4,7 +4,8 @@ const GetNotes = require("../../database/Actions/GetNotes");
 const DeleteNote = require("../../database/Actions/DeleteNote");
 const UpdateNote = require("../../database/Actions/UpdateNote");
 const GetNoteCitations = require("../../database/Actions/GetNoteCitations");
-
+const GetNotesByUserId = require("../../database/Actions/GetNotesByUserId");
+const auth = require("../Controllers/auth")
 /**
  * If :id parameter provided, gets that one note, otherwise gets all notes.
  * @param  {object}  req
@@ -16,7 +17,13 @@ const getNotes = async (req, res) => {
     const note = await GetNote(req.params.id);
     res.status(200).send(note);
   } else {
-    const notes = await GetNotes();
+    let notes;
+    if (req.query.token){
+      const userId = auth.verifyUserWebToken(req.query.token)._id;
+      notes = await GetNotesByUserId(userId)
+    } else{
+      notes = await GetNotes();
+    }
     res.status(200).send(notes);
   }
 };
@@ -29,12 +36,14 @@ const getNotes = async (req, res) => {
  */
 const createNote = async (req, res) => {
   const {text, title}  = req.body;
-  //TODO: check that below is the right structure once we implement passport authentication
-  //TODO: REMOVE THE OR (temp use for testing before implementing passport)
-  const userId = req.session.passport.id || "5ac50c92b4cfe6637add94c6";
+
   try {
-    const note = await CreateNote(userId, text, title);
-    res.status(200).send(note);
+    if (req.body.token){
+      const userId = auth.verifyUserWebToken(req.body.token)._id;
+      const note = await CreateNote(userId, text, title);
+      res.status(200).send(note);
+    }
+
   } catch (e) {
     throw e;
   }

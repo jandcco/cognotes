@@ -5,15 +5,42 @@ const router = express.Router();
 const passport = require("passport");
 
 
-const noteController = require("./Controllers/note");
-const tagController = require("./Controllers/tag");
-const groupController = require("./Controllers/group");
-const citationController = require("./Controllers/citation");
+const {
+  getNotes,
+  createNote,
+  deleteNote,
+  updateNote,
+  getNoteCitations
+} = require("./Controllers/note");
+const {
+  getTags,
+  deleteTag,
+  addTagToNote,
+  removeTagFromNote
+} = require("./Controllers/tag");
+const {
+  createGroup,
+  joinGroup,
+  deleteGroup,
+  getAllGroups,
+  getGroup,
+  getPendingMembers,
+  promoteMemberToAdmin,
+  demoteAdminToMember,
+  removeMember,
+  addNoteToGroup,
+  removeNoteFromGroup,
+  acceptPendingMembers,
+} = require("./Controllers/group");
+const {
+  createCitation,
+  deleteCitation,
+  updateCitation
+} = require("./Controllers/citation");
 
-/* Auth & user routes */
 router.route("/users")
   .get(auth.verifyTokenMiddleWare, userController.getUsers)
-  .post(passport.authenticate("local-signup"), userController.signedUp)
+  .post(auth.tryRegisterLocal, userController.signedUp)
   .put(auth.verifyTokenMiddleWare, userController.updateUsername)
   .delete(auth.verifyTokenMiddleWare, userController.deleteUser);
 

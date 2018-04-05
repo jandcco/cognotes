@@ -5,6 +5,7 @@ const UpdateUsername = require("../../database/Actions/UpdateUsername");
 const GetUsers = require("../../database/Actions/GetUsers");
 const {signUserWebToken, verifyUserWebToken} = require("../Controllers/auth");
 const createUser = async (req, res) => {
+  console.log("HIT")
   try{
     const newUser = await CreateUser(req.body.displayName, req.body.password);
     res.send("200 OK");

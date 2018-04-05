@@ -2,6 +2,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const User = require("../../database/Models/User");
 const GetUserByEmail = require("../../database/Actions/GetUserByEmail");
+const CreateUser = require("../../database/Actions/CreateUser");
 const jwt = require("jsonwebtoken");
 const tempSecret = "TEMPORARYNOTREALLYPRIVATEKEY";
 
@@ -33,7 +34,6 @@ const verifyTokenMiddleWare = (req, res, next) => {
 }
 
 const logUserInLocal = async function(req, email, password, done){
-
   try{
     const existingUser = await GetUserByEmail(email);
     if (existingUser){
@@ -52,10 +52,28 @@ const logUserInLocal = async function(req, email, password, done){
 
 };
 
+const registerUserLocal = async function(req, email, password, done){
+  try{
+    const existingUser = await User.findOne({email});
+    if (existingUser){
+      const UserExists = new Error("User already exists")
+      throw UserExists;
+    }
+    const newUser = await CreateUser(email, req.body.displayName, password);
+    if (newUser){
+      return done(null, newUser);
+    }
+  } catch (e) {
+    console.log(e);
+    done (e, false);
+  }
+}
 passport.use("local-login", new LocalStrategy({usernameField: "email", passReqToCallback: true},
   logUserInLocal
 ));
-
+passport.use("local-register", new LocalStrategy({usernameField: "email", passReqToCallback: true},
+  registerUserLocal
+));
 passport.serializeUser(function(user, done) {
   done(null, user._id);
 });
@@ -73,9 +91,11 @@ passport.deserializeUser(async function(id, done) {
 });
 
 const tryAuthenticateLocal = passport.authenticate("local-login");
+const tryRegisterLocal = passport.authenticate("local-register");
 
 module.exports = {
   tryAuthenticateLocal,
+  tryRegisterLocal,
   signUserWebToken,
   verifyUserWebToken,
   verifyTokenMiddleWare
