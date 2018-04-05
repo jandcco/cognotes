@@ -40,7 +40,8 @@ const deleteTag = async (req, res) => {
  * @return {Promise}
  */
 const addTagToNote = async (req, res) => {
-  const { noteId, tagText } = req.body;
+  const noteId = req.params.id;
+  const { tagText } = req.body;
   const userId = req.session.passport.id;
   try {
     let note = await GetNote(noteId);
@@ -61,7 +62,7 @@ const addTagToNote = async (req, res) => {
  * @return {Promise}
  */
 const removeTagFromNote = async (req, res) => {
-  const { noteId, tagText } = req.body;
+  const { noteId, tagText } = req.params;
   const userId = req.session.passport.id;
   try {
     let note = await GetNote(noteId);

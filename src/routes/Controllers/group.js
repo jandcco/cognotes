@@ -114,8 +114,7 @@ const addNoteToGroup = async (req, res) => {
 const removeNoteFromGroup = async (req, res) => {
   const userId = req.session.passport.id;
   if (!userId) return res.status(401);
-  const groupId = req.param.id;
-  const noteId = req.body.noteId;
+  const {groupId, noteId} = req.params;
   try {
     let group = await GetGroup(groupId);
     let note = await GetNote(noteId);

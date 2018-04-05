@@ -5,85 +5,64 @@ const router = express.Router();
 const passport = require("passport");
 
 
-const {
-  getNotes,
-  createNote,
-  deleteNote,
-  updateNote,
-  getNoteCitations
-} = require("./Controllers/note");
-const {
-  getTags,
-  deleteTag,
-  addTagToNote,
-  removeTagFromNote
-} = require("./Controllers/note");
-const {
-  createGroup,
-  joinGroup,
-  deleteGroup,
-  getAllGroups,
-  getGroup,
-  getPendingMembers,
-  promoteMemberToAdmin,
-  demoteAdminToMember,
-  removeMember,
-  addNoteToGroup,
-  removeNoteFromGroup,
-  acceptPendingMembers,
-} = require("./Controllers/group");
-const {
-  createCitation,
-  deleteCitation,
-  updateCitation
-} = require("./Controllers/citation");
+const noteController = require("./Controllers/note");
+const tagController = require("./Controllers/note");
+const groupController = require("./Controllers/group");
+const citationController = require("./Controllers/citation");
 
-
+/* Auth & user routes */
 router.route("/users")
   .get(auth.verifyTokenMiddleWare, userController.getUsers)
   .post(passport.authenticate("local-signup"), userController.signedUp)
   .put(auth.verifyTokenMiddleWare, userController.updateUsername)
-  .delete(auth.verifyTokenMiddleWare, userController.deleteUser)
+  .delete(auth.verifyTokenMiddleWare, userController.deleteUser);
 
 router.route("/login")
-  .post(auth.tryAuthenticateLocal, userController.loggedIn)
-  
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-/* Auth & user routes */
-
+  .post(auth.tryAuthenticateLocal, userController.loggedIn);
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /* Note routes */
-router.post("/note", createNote);
-router.get("/note/:id/citations", getNoteCitations);
-router.get("/note", getNotes); // opt :id param to get 1 note, otherwise gets all
-router.put("/note/:id", updateNote);
-router.delete("/note/:id", deleteNote);
+
+router.post("/note", noteController.createNote);
+router.get("/note/:id/citations", noteController.getNoteCitations);
+router.post("/note/:id/citation", citationController.createCitation);
+router.get("/note", noteController.getNotes); // opt :id param to get 1 note, otherwise gets all
+router.put("/note/:id", noteController.updateNote);
+router.post("/note/:noteId/tag/", tagController.addTagToNote);
+router.delete("/note/:noteId/tag/:tagText", tagController.removeTagFromNote);
+router.delete("/note/:id", noteController.deleteNote);
+
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /* Tag routes */
-router.get("/tag", getTags);
-router.delete("/tag/:id", deleteTag);
+
+router.get("/tag", tagController.getTags);
+router.delete("/tag/:id", tagController.deleteTag);
+
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /* Group routes */
-router.get("/group/:id/join", joinGroup);
-router.get("/group/:id", getGroup);
-router.post("/group/:id", addNoteToGroup);
-router.delete("/group/:id", removeNoteFromGroup);
-router.get("/group", getAllGroups);
-router.post("/group", createGroup);
-router.get("/moderate/group/:id", getPendingMembers);
-router.put("/moderate/group/:id/acceptMembers", acceptPendingMembers);
-router.put("/moderate/group/:id/admin", promoteMemberToAdmin);
-router.delete("/moderate/group/:id/admin", demoteAdminToMember);
-router.delete("/moderate/group/:id/member", removeMember);
 
-router.delete("/moderate/group/:id", deleteGroup);
+router.get("/group/:id/join", groupController.joinGroup);
+router.get("/group/:id", groupController.getGroup);
+router.post("/group/:id", groupController.addNoteToGroup);
+router.delete("/group/:groupId/note/:noteId", groupController.removeNoteFromGroup);
+router.get("/group", groupController.getAllGroups);
+router.post("/group", groupController.createGroup);
+
+router.get("/moderate/group/:id", groupController.getPendingMembers);
+router.put("/moderate/group/:id/acceptMembers", groupController.acceptPendingMembers);
+router.put("/moderate/group/:id/admin", groupController.promoteMemberToAdmin);
+router.delete("/moderate/group/:id/admin", groupController.demoteAdminToMember);
+router.delete("/moderate/group/:id/member", groupController.removeMember);
+router.delete("/moderate/group/:id", groupController.deleteGroup);
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /* Citation routes */
+
+router.put("/citation/:id", citationController.updateCitation);
+router.delete("/citation/:id", citationController.deleteCitation);
+
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 
 
 module.exports = router;
-

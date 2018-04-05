@@ -10,7 +10,8 @@ const GetCitation = require("../../database/Actions/GetCitation");
  * @return {Promise}
  */
 const createCitation = async (req, res) => {
-  const { noteId, url, caption, publication } = req.body;
+  const noteId = req.params.id;
+  const { url, caption, publication } = req.body;
   try {
     let citation = await CreateCitation(noteId, url, caption, publication);
     res.status(200).send(citation);
