@@ -45,10 +45,4 @@ app.use(function(err, req, res, next){
 });
 
 // Start the Server
-<<<<<<< HEAD
-app.listen(3000, () => console.log('Example app listening on port 3000!'));
-
-module.exports = app;
-=======
 app.listen(config.server.port, () => console.log(`Example app listening on port ${config.server.port}!`));
->>>>>>> Super basic jwt authentication
