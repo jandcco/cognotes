@@ -3,6 +3,7 @@ const CreateUser = require("../../database/Actions/CreateUser");
 const DeleteUser = require("../../database/Actions/DeleteUser");
 const UpdateUsername = require("../../database/Actions/UpdateUsername");
 const GetUsers = require("../../database/Actions/GetUsers");
+const {signUserWebToken, verifyUserWebToken} = require("../Controllers/auth");
 const createUser = async (req, res) => {
   try{
     const newUser = await CreateUser(req.body.displayName, req.body.password);
@@ -44,11 +45,11 @@ const getUser = async (req, res) => {
   }
 }
 const getUsers = async (req, res) => {
-  console.log(req.session);
   try{
     const user = await GetUsers(req.query.user);
     res.json(user);
   } catch(e) {
+    console.log('error while getting users:', e.message)
     res.send(e);
   }
 }
@@ -57,8 +58,12 @@ const signedUp = async (req, res) => {
   res.send("OK");
 }
 
-const loggedIn = async (req, res) => {
-  res.send("OK");
+const loggedIn = (req, res) => {
+  const newToken = signUserWebToken(req.user);
+  console.log(newToken);
+  res.json({
+    token: newToken
+  });
 }
 module.exports = {
   createUser,
