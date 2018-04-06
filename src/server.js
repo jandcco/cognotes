@@ -26,7 +26,7 @@ const index = require('./routes/index');
 app.use(function(req, res, next) {
   console.log(req.session);
   res.header("Access-Control-Allow-Credentials", "true");
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Origin", "http://cognotes-client.herokuapp.com");
   res.header("Access-Control-Allow-Headers", "Access-Control-Allow-Credentials, Origin, X-Requested-With, Content-Type, Accept, Authorization");
   next();
 });
@@ -52,4 +52,3 @@ app.use(function(err, req, res, next){ // eslint-disable-line no-unused-vars
 app.listen(config.server.port, () => console.log(`Example app listening on port ${config.server.port}!`));
 
 module.exports = app;
-
