@@ -13,8 +13,8 @@ const auth = require("../Controllers/auth")
  * @return {Promise}
  */
 const getNotes = async (req, res) => {
-  if(req.params.id) {
-    const note = await GetNote(req.params.id);
+  if(req.query.id) {
+    const note = await GetNote(req.query.id);
     res.status(200).send(note);
   } else {
     let notes;
@@ -56,10 +56,11 @@ const createNote = async (req, res) => {
  * @return {undefined}     [description]
  */
 const deleteNote = async (req, res) => {
-  const userId = req.session.passport.id;
+  console.log(req.body);
+  const userId = auth.verifyUserWebToken(req.query.token)._id;
   const noteId = req.params.id;
   const note = await GetNote(noteId);
-  if (note.owner === userId) {
+  if (note.owner == userId) {
     await DeleteNote(noteId);
     res.status(200);
   } else {
@@ -73,12 +74,14 @@ const deleteNote = async (req, res) => {
  * @return {undefined}     [description]
  */
 const updateNote = async (req, res) => {
-  const userId = req.session.passport.id;
+  const userId = auth.verifyUserWebToken(req.body.token)._id;
   const noteId = req.params.id
-  const {updatedText} = req.body;
+  const {updatedText, updatedTitle} = req.body;
+  console.log(userId, noteId, req.body.text)
   const note = await GetNote(noteId);
-  if (note.owner === userId) {
-    const updated = await UpdateNote(noteId, updatedText);
+  if (note.owner == userId) {
+    const updated = await UpdateNote(noteId, updatedTitle, updatedText);
+    console.log("UPDATE",updated)
     res.status(200).send(updated);
   } else {
     res.status(403);

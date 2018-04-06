@@ -1,7 +1,8 @@
 const Note = require("../Models/Note");
 
 const GetNote = async (noteID) => {
-  return await Note.find({_id: noteID});
+  const note = await Note.findOne({_id: noteID});
+  return note;
 };
 
 module.exports = GetNote;
