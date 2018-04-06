@@ -49,6 +49,6 @@ app.use(function(err, req, res, next){ // eslint-disable-line no-unused-vars
 });
 
 // Start the Server
-app.listen(config.server.port, () => console.log(`Example app listening on port ${config.server.port}!`));
+app.listen(process.env.PORT || 8080);
 
 module.exports = app;
